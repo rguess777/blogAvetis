@@ -3,18 +3,18 @@ import PostsModel from '../../blogavetisback/models/PostsModel.js'
 const postsRoute = ({ app, db }) => {
   app.post('/posts', async (req, res) => {
     const {
-      body: { title, content, postId }
+      body: { title, content, userId }
     } = req
     try {
       const post = await PostsModel.query().insertAndFetch({
         title,
         content,
-        postId
+        userId
       })
       res.send(post)
     } catch (err) {
       console.log(err)
-      res.status(500).send({ error: 'oops.' })
+      res.status(500).send({ error: 'severside error.' })
     }
   })
 
@@ -27,7 +27,7 @@ const postsRoute = ({ app, db }) => {
       params: { postId }
     } = req
 
-    const query = PostsModel.query().withGraphFetched('author')
+    const query = PostsModel.query().withGraphFetched('[author, comments.user]')
     if (postId) {
       query.findById(postId)
     }

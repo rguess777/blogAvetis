@@ -5,7 +5,7 @@ import auth from '../middlewares/auth.js'
 const usersRoute = ({ app }) => {
   app.post('/users', async (req, res) => {
     const {
-      body: { email, password },
+      body: { email, password }
     } = req
 
     const [passwordHash, passwordSalt] = hashPassword(password)
@@ -13,6 +13,7 @@ const usersRoute = ({ app }) => {
       email,
       passwordHash,
       passwordSalt,
+      roleId: 1
     })
     res.send(user)
   })
@@ -24,7 +25,7 @@ const usersRoute = ({ app }) => {
   app.get('/users/:userId', auth, async (req, res) => {
     const {
       params: { userId },
-      session: { userId: sessionUserId },
+      session: { userId: sessionUserId }
     } = req
     console.log('test')
     if (Number(userId) !== sessionUserId) {
@@ -44,7 +45,7 @@ const usersRoute = ({ app }) => {
 
   app.put('/users/:userId', async (req, res) => {
     const {
-      params: { userId: rawuserId },
+      params: { userId: rawuserId }
     } = req
     const userId = Number(rawuserId)
     const [user] = await UserModel.query().findById(userId)
@@ -55,13 +56,14 @@ const usersRoute = ({ app }) => {
   })
   app.delete('/users/:userId', async (req, res) => {
     const {
-      params: { userId: rawuserId },
+      params: { userId: rawuserId }
     } = req
     const userId = Number(rawuserId)
 
     const user = await UserModel.query().findById(userId)
     if (!user) {
       res.status(404).send({ error: 'not found' })
+      return
     }
     await user.$query().delete()
     res.send(user)
