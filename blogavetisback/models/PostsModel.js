@@ -1,6 +1,7 @@
-import { Model } from 'objection'
+import { Model } from 'objection';
+import CommentsModel from './CommentsModel.js';
 // import CommentsModel from "./CommentsModel.js"
-import UserModel from './UserModel.js'
+import UserModel from './UserModel.js';
 
 class PostsModel extends Model {
   static tableName = 'posts'
@@ -12,19 +13,17 @@ class PostsModel extends Model {
         modelClass: UserModel,
         join: {
           from: 'posts.userId',
-          to: 'users.id',
-        },
+          to: 'users.id'
+        }
       },
-      
       comments: {
         relation: Model.HasManyRelation,
         modelClass: CommentsModel,
         join: {
-          from: "posts.id",
-          to: "comments.postId",
-        },
-      },
-      
+          from: 'posts.id',
+          to: 'comments.postId'
+        }
+      }
     }
   }
 }
